@@ -23,18 +23,7 @@ import java.util.List;
  */
 public class p473 {
     // Adds a word into the data structure.
-    public class TrieNode {
-        public char value;
-        public boolean hasWord;
-        public TrieNode[] children;
-        public TrieNode() {
-            children = new TrieNode[26];
-        }
-        public TrieNode(char c) {
-            this();
-            value = c;
-        }
-    }
+
     public TrieNode root;
 
     public void addWord(String word) {
