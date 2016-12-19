@@ -28,7 +28,41 @@ public class p434 {
     public List<Integer> numIslands2(int n, int m, Point[] operators) {
         // Write your code here
         List<Integer> result = new ArrayList<>();
-        UnionFind uf = new UnionFind(n * m);
+        UnionFind uf = new UnionFind(n * m + 1);
+        boolean[] visited = new boolean[n * m + 1];
+        int count = 0;
+        for (Point p : operators) {
+            int value = (p.x * m) + p.y + 1;
+            if (visited[value]) continue;
+            else visited[value] = true;
+            count++;
+            if (value % m != 1 && visited[value-1]) {
+                if (!uf.query(value, value - 1))  {
+                    uf.connect(value, value - 1);
+                    count--;
+                }
+            }
+            if (value % m != 0 && visited[value+1]) {
+                if (!uf.query(value, value + 1))  {
+                    uf.connect(value, value + 1);
+                    count--;
+                }
+            }
+            if (value > m && visited[value - m]) {
+                if (!uf.query(value, value - m))  {
+                    uf.connect(value, value - m);
+                    count--;
+                }
+            }
+            if (value <= (n - 1) * m && visited[value + m]) {
+                if (!uf.query(value, value + m))  {
+                    uf.connect(value, value + m);
+                    count--;
+                }
+            }
+            int temp = count;
+            result.add(temp);
+        }
         return result;
     }
 }
