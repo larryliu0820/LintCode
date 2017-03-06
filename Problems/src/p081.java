@@ -29,12 +29,22 @@ public class p081 {
         HashHeap smaller = new HashHeap("max");
         HashHeap larger = new HashHeap("min");
         int[] result = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            if (smaller.size() <= larger.size()) {
+        if (nums == null || nums.length == 0) return result;
+        int currMedian = nums[0];
+        smaller.add(currMedian);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] <= currMedian) {
                 smaller.add(nums[i]);
             } else {
                 larger.add(nums[i]);
             }
+            if (smaller.size() > larger.size()+1) {
+                larger.add(smaller.poll());
+            } else if (larger.size() > smaller.size()) {
+                smaller.add(larger.poll());
+            }
+            currMedian = smaller.peek();
+            result[i] = (currMedian);
         }
         return result;
     }
