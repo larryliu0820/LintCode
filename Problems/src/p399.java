@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 /**
  * Created by Valued Customer on 3/3/2017.
  * Nuts & Bolts Problem
@@ -46,5 +49,50 @@ public class p399 {
      */
     public void sortNutsAndBolts(String[] nuts, String[] bolts, NBComparator compare) {
         // write your code here
+
+        sortHelper(nuts, bolts, 0, nuts.length-1, compare);
+        System.out.println(Arrays.toString(nuts));
+        System.out.println(Arrays.toString(bolts));
+    }
+
+    private void sortHelper(String[] nuts, String[] bolts, int low, int high, NBComparator compare) {
+        if (low < high) {
+            int pivot = partition(nuts, low, high, bolts[high], compare);
+            partition(bolts, low, high, nuts[pivot], compare);
+
+            sortHelper(bolts, nuts, low, pivot - 1, compare);
+            sortHelper(bolts, nuts, pivot + 1, high, compare);
+        }
+    }
+    private int partition(String[] arr, int low, int high, String pivot, NBComparator compare) {
+        int i = low, j = high;
+        int test = compare.cmp(arr[i], pivot);
+        if (test != 2) {
+            while (i < j) {
+                while (compare.cmp(arr[i], pivot) < 0) i++;
+                while (compare.cmp(arr[j], pivot) > 0) j--;
+                swap(arr, i, j);
+            }
+        } else {
+            while (i < j) {
+                while (compare.cmp(pivot, arr[i]) > 0) i++;
+                while (compare.cmp(pivot, arr[j]) < 0) j--;
+
+                swap(arr, i, j);
+            }
+        }
+        return i;
+    }
+
+    private void swap(String[] arr, int i, int j) {
+        String temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    public static void main(String[] args) {
+        String[] nuts = new String[]{"ab","bc","dd","gg"};
+        String[] bolts = new String[]{"AB","GG","DD","BC"};
+        p399 sol = new p399();
+        sol.sortNutsAndBolts(nuts, bolts, new NBComparator());
     }
 }
