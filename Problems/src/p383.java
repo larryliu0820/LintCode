@@ -22,9 +22,22 @@ public class p383 {
     public int maxArea(int[] heights) {
         // write your code here
         if (heights == null || heights.length == 0) return 0;
-        int i = 0, j = heights.length - 1;
-
-        int maxWater = (j - i) * Math.min(heights[i], heights[j]);
-        return 0;
+        int begin = 0, end = heights.length - 1;
+        int level = Math.min(heights[begin], heights[end]);
+        int area = (end - begin) * level;
+        int sum = 0;
+        while (begin <= end) {
+            if(Math.min(heights[begin], heights[end]) > level) {
+                int newLevel = Math.min(heights[begin], heights[end]);
+                area += (newLevel - level) * (end - begin + 1);
+                level = newLevel;
+            }
+            if(heights[begin] <= heights[end]) {
+                sum += heights[begin++];
+            }else{
+                sum += heights[end--];
+            }
+        }
+        return area - sum;
     }
 }
