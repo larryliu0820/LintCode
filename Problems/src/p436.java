@@ -1,3 +1,7 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -24,23 +28,46 @@ public class p436 {
     public int maxSquare(int[][] matrix) {
         // write your code here
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
-        int[][] dp = new int[matrix.length][matrix[0].length];
-        for (int i = 0; i < matrix[0].length; i++) {
-            dp[0][i] = matrix[0][i];
-        }
+        int[][] dp = new int[matrix.length+1][matrix[0].length+1];
 
         int max = 0;
-        for (int row = 1; row < matrix.length; row++) {
-            Stack<Integer> stack = new Stack<>();
-            for (int col = 0; col < matrix[0].length; col++) {
-                dp[row][col] = dp[row-1][col] + matrix[row][col];
-                if (stack.isEmpty()) {
-                    stack.push(dp[row][col]);
+        for (int row = 1; row < dp.length; row++) {
+            for (int col = 1; col < dp[0].length; col++) {
+                if (matrix[row-1][col-1] == 1) {
+                    dp[row][col] = Math.min(Math.min(dp[row-1][col], dp[row][col-1]), dp[row-1][col-1]) + 1;
+                    max = Math.max(max, dp[row][col]);
                 }
-                
             }
         }
+        return max*max;
+    }
 
+    public static void main(String[] args) {
+        p436 sol = new p436();
+        String filename = "Problems/src/6.in";
+        int[][] data = null;
+        try {
+            FileReader fileReader = new FileReader(filename);
+
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String content = bufferedReader.readLine();
+            String[] list = content.split("]");
+
+            data = new int[list.length][];
+            for (int i = 0; i < list.length; i++) {
+                String nums = list[i].substring(2);
+                String[] numList = nums.split(",");
+                data[i] = new int[numList.length];
+                for (int j = 0; j < numList.length; j++) data[i][j] = Integer.parseInt(numList[j]);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("no such file");
+        } catch (IOException ex) {
+            System.out.println("Error");
+        }
+
+        System.out.println(sol.maxSquare(data));
 
     }
 }
