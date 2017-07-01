@@ -1,0 +1,41 @@
+import java.util.*;
+
+/**
+ * Created by Valued Customer on 6/24/2017.
+ * Subarray Sum
+ *
+ * Given an integer array, find a subarray where the sum of numbers is zero. Your code should return the index of the
+ * first number and the index of the last number.
+
+ Notice
+
+ There is at least one subarray that it's sum equals to zero.
+
+ Example
+ Given [-3, 1, 2, -3, 4], return [0, 2] or [1, 3].
+ */
+public class p138 {
+    /**
+     * @param nums: A list of integers
+     * @return: A list of integers includes the index of the first number
+     *          and the index of the last number
+     */
+    public ArrayList<Integer> subarraySum(int[] nums) {
+        // write your code here
+        int[] dp = new int[nums.length+1];
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            dp[i+1] = dp[i] + nums[i];
+            if (map.containsKey(dp[i+1])) {
+                result.add(map.get(dp[i+1]));
+                result.add(i);
+                break;
+            } else {
+                map.put(dp[i+1], i+1);
+            }
+        }
+        return result;
+    }
+}
